@@ -14,5 +14,7 @@ namespace NewsPH.Data
         {
 
         }
+
+        public DbSet<News> News { get; set; }
     }
 }
