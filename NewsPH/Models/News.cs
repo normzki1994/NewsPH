@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Web;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace NewsPH.Models
 {
@@ -20,8 +22,9 @@ namespace NewsPH.Models
         public DateTime Date { get; set; }
         [Required]
         public string Image { get; set; }
-        public int UserId { get; set; }
-        [ForeignKey("User")]
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual ApplicationUser ApplicationUser { get; set; }
+        
     }
 }
