@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NewsPH.Data;
@@ -26,6 +27,12 @@ namespace NewsPH.Controllers
             webHostEnvironment = hostEnvironment;
         }
 
+        public IActionResult Index()
+        {
+            IEnumerable<News> news = _db.News;
+            return View(news);
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -43,34 +50,58 @@ namespace NewsPH.Controllers
             if (ModelState.IsValid)
             {
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                News news = new News()
-                {
-                    Title = model.Title,
-                    Content = model.Content,
-                    Date = model.Date,
-                    Image = UploadFile(model),
-                    UserId = userId
-                };
+                //News news = new News()
+                //{
+                //    Title = model.Title,
+                //    Content = model.Content,
+                //    Date = model.Date,
+                //    Image = UploadFile(model),
+                //    UserId = userId
+                //};
+                model.News.Image = UploadFile(model.ImageFile);
+                model.News.UserId = userId;
 
-                _db.News.Add(news);
+                _db.News.Add(model.News);
                 _db.SaveChanges();
             }
 
             return View(model);
         }
 
-        private string UploadFile(NewsViewModel model)
+        public IActionResult Update(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            NewsViewModel newsViewModel = new NewsViewModel()
+            {
+                News = new News()
+            };
+
+            newsViewModel.News = _db.News.Find(id);
+
+            if (newsViewModel.News == null)
+            {
+                return NotFound();
+            }
+
+            return View(newsViewModel);
+        }
+
+        private string UploadFile(IFormFile file)
         {
             string uniqueFileName = null;
 
-            if (model.ImageFile != null)
+            if (file != null)
             {
                 string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "news-image");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    model.ImageFile.CopyTo(fileStream);
+                    file.CopyTo(fileStream);
                 }
             }
             return uniqueFileName;

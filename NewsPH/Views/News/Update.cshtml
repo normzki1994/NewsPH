@@ -6,8 +6,10 @@
 
 <section>
     <h1 class="text-center">Create a news</h1>
-    <form method="post" asp-controller="News" asp-action="Create" enctype="multipart/form-data">
+    <form asp-controller="News" asp-action="Create" enctype="multipart/form-data">
         <div class="text-danger" asp-validation-summary="All"></div>
+
+        <input type="hidden" asp-for="News.Id"/>
 
         <div>
             <img src="" class="news-image" />

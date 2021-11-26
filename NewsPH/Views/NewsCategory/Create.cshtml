@@ -1,0 +1,25 @@
+﻿@model NewsPH.Models.NewsCategory
+
+@{
+    ViewData["Title"] = "Create news category";
+}
+
+<section>
+    <h1 class="text-center">Create a news category</h1>
+
+    <form method="post" asp-controller="NewsCategory" asp-action="Create">
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <input type="submit" value="Create" class="btn btn-primary d-block ml-auto" />
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -9,13 +9,7 @@ namespace NewsPH.Models.ViewModels
 {
     public class NewsViewModel
     {
-        [Required]
-        public string Title { get; set; }
-        [Required]
-        public string Content { get; set; }
-        [Required]
-        public DateTime Date { get; set; }
-        [Required]
+        public News News { get; set; }
         public IFormFile ImageFile { get; set; }
         [Required]
         [FileExtensions(Extensions = "jpg,jpeg,png")]
