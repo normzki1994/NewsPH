@@ -19,7 +19,8 @@ namespace NewsPH.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var newsCategories = _db.NewsCategories;
+            return View(newsCategories);
         }
 
         public IActionResult Create()
@@ -38,6 +39,37 @@ namespace NewsPH.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult Update(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var category = _db.NewsCategories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(NewsCategory newsCategory)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.NewsCategories.Update(newsCategory);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(newsCategory);
         }
     }
 }
