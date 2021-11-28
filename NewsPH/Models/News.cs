@@ -20,8 +20,9 @@ namespace NewsPH.Models
         public string Content { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        [Required]
         public string Image { get; set; }
+        [DisplayName("Category")]
+        [Required]
         public int NewsCategoryId { get; set; }
         [ForeignKey("NewsCategoryId")]
         public virtual NewsCategory NewsCategory { get; set; }

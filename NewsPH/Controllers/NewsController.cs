@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NewsPH.Data;
 using NewsPH.Models;
 using NewsPH.Models.ViewModels;
@@ -35,7 +36,15 @@ namespace NewsPH.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            NewsViewModel newsViewModel = new NewsViewModel()
+            {
+                NewsCategories = _db.NewsCategories.Select(category => new SelectListItem
+                {
+                    Text = category.Name,
+                    Value = category.Id.ToString()
+                })
+            };
+            return View(newsViewModel);
         }
 
         [HttpPost]
@@ -44,12 +53,26 @@ namespace NewsPH.Controllers
         {
             if (model.ImageFile == null)
             {
-                return View();
+                return View(model);
+            }
+
+            string[] validContentType = { "image/png", "image/jpg", "image/jpeg" };
+
+            if(validContentType.Contains(model.ImageFile.ContentType) == false)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid file type");
+                return View(model);
+            }
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return Unauthorized();
             }
 
             if (ModelState.IsValid)
             {
-                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 //News news = new News()
                 //{
                 //    Title = model.Title,
@@ -63,6 +86,7 @@ namespace NewsPH.Controllers
 
                 _db.News.Add(model.News);
                 _db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
             return View(model);

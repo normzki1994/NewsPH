@@ -17,7 +17,6 @@
             <label asp-for="ImageFile" class="form-label"></label>
             <input class="form-control" asp-for="ImageFile" onchange="onChangeImage(event)">
             <span asp-validation-for="ImageFile" class="text-danger"></span>
-            <span asp-validation-for="ImageFileName" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
@@ -30,6 +29,14 @@
             <label asp-for="News.Content" class="form-label"></label>
             <textarea class="form-control" asp-for="News.Content" rows="3"></textarea>
             <span asp-validation-for="News.Content" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="News.NewsCategoryId" class="form-label"></label>
+            <select class="form-control" aria-label="Default select example" asp-for="News.NewsCategoryId" asp-items="@Model.NewsCategories">
+                <option selected value="">Select category</option>
+            </select>
+            <span asp-validation-for="News.NewsCategoryId" class="text-danger"></span>
         </div>
 
         <div class="mb-3">

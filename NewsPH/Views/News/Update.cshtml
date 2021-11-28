@@ -12,14 +12,14 @@
         <input type="hidden" asp-for="News.Id"/>
 
         <div>
-            <img src="" class="news-image" />
+            <img src="~/news-image/@Model.News.Image" class="news-image" />
         </div>
 
         <div class="mb-3">
             <label asp-for="ImageFile" class="form-label"></label>
             <input class="form-control" asp-for="ImageFile" onchange="onChangeImage(event)">
             <span asp-validation-for="ImageFile" class="text-danger"></span>
-            <span asp-validation-for="ImageFileName" class="text-danger"></span>
+            @*<span asp-validation-for="ImageFileName" class="text-danger"></span>*@
         </div>
 
         <div class="mb-3">
@@ -40,7 +40,7 @@
             <span asp-validation-for="News.Date" class="text-danger"></span>
         </div>
 
-        <input type="submit" value="Create" class="btn btn-primary d-block ml-auto" />
+        <input type="submit" value="Update" class="btn btn-primary d-block ml-auto" />
     </form>
 </section>
 
