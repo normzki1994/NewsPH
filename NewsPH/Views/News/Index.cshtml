@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@news.Title</h5>
                     <p class="card-text">@news.Content</p>
-                    <span>@news.Date</span>
+                    <span class="d-block text-sm-left fw-light mb-2">@news.Date</span>
                     <a asp-controller="News" asp-action="Update" asp-route-Id="@news.Id" class="btn btn-primary">Update</a>
                 </div>
             </div>

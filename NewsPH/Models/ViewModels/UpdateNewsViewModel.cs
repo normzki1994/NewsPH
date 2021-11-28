@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NewsPH.Models.ViewModels
 {
-    public class NewsViewModel
+    public class UpdateNewsViewModel
     {
         public News News { get; set; }
         [DataType(DataType.Upload)]

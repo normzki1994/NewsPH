@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using NewsPH.Data;
 using NewsPH.Models;
 using NewsPH.Models.ViewModels;
@@ -73,14 +74,6 @@ namespace NewsPH.Controllers
 
             if (ModelState.IsValid)
             {
-                //News news = new News()
-                //{
-                //    Title = model.Title,
-                //    Content = model.Content,
-                //    Date = model.Date,
-                //    Image = UploadFile(model),
-                //    UserId = userId
-                //};
                 model.News.Image = UploadFile(model.ImageFile);
                 model.News.UserId = userId;
 
@@ -99,9 +92,13 @@ namespace NewsPH.Controllers
                 return NotFound();
             }
 
-            NewsViewModel newsViewModel = new NewsViewModel()
+            UpdateNewsViewModel newsViewModel = new UpdateNewsViewModel()
             {
-                News = new News()
+                NewsCategories = _db.NewsCategories.Select(category => new SelectListItem
+                {
+                    Text = category.Name,
+                    Value = category.Id.ToString()
+                })
             };
 
             newsViewModel.News = _db.News.Find(id);
@@ -112,6 +109,51 @@ namespace NewsPH.Controllers
             }
 
             return View(newsViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(UpdateNewsViewModel model)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            News newsindb = new News();
+            string connectionString = "Server=.;Database=NewsPH;Trusted_Connection=True;MultipleActiveResultSets=True";
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer(connectionString);
+
+            using (ApplicationDbContext dbContext = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                newsindb = dbContext.News.Find(model.News.Id);
+                if (newsindb == null)
+                {
+                    return NotFound();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (model.ImageFile == null)
+                {
+                    model.News.Image = newsindb.Image;
+                }
+                else
+                {
+                    model.News.Image = UploadFile(model.ImageFile);
+                }
+                model.News.UserId = userId;
+                _db.News.Update(model.News);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
         }
 
         private string UploadFile(IFormFile file)

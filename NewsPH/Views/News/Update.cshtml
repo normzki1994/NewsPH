@@ -1,4 +1,4 @@
-﻿@model NewsPH.Models.ViewModels.NewsViewModel
+﻿@model NewsPH.Models.ViewModels.UpdateNewsViewModel
 
 @{
     ViewData["Title"] = "Create news";
@@ -6,10 +6,10 @@
 
 <section>
     <h1 class="text-center">Create a news</h1>
-    <form asp-controller="News" asp-action="Create" enctype="multipart/form-data">
+    <form asp-controller="News" asp-action="Update" enctype="multipart/form-data">
         <div class="text-danger" asp-validation-summary="All"></div>
 
-        <input type="hidden" asp-for="News.Id"/>
+        <input type="hidden" asp-for="News.Id" />
 
         <div>
             <img src="~/news-image/@Model.News.Image" class="news-image" />
@@ -19,7 +19,6 @@
             <label asp-for="ImageFile" class="form-label"></label>
             <input class="form-control" asp-for="ImageFile" onchange="onChangeImage(event)">
             <span asp-validation-for="ImageFile" class="text-danger"></span>
-            @*<span asp-validation-for="ImageFileName" class="text-danger"></span>*@
         </div>
 
         <div class="mb-3">
@@ -32,6 +31,14 @@
             <label asp-for="News.Content" class="form-label"></label>
             <textarea class="form-control" asp-for="News.Content" rows="3"></textarea>
             <span asp-validation-for="News.Content" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="News.NewsCategoryId" class="form-label"></label>
+            <select class="form-control" aria-label="Default select example" asp-for="News.NewsCategoryId" asp-items="@Model.NewsCategories">
+                <option selected value="">Select category</option>
+            </select>
+            <span asp-validation-for="News.NewsCategoryId" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
