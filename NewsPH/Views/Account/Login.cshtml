@@ -8,6 +8,8 @@
     <h2 class="text-center">Sign In</h2>
 
     <form method="post" asp-action="Login" asp-controller="Account" class="container-sm">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
         <div class="mb-3">
             <label class="form-label" asp-for="Email"></label>
             <input asp-for="Email" class="form-control" />

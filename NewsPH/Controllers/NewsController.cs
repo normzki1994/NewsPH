@@ -156,6 +156,46 @@ namespace NewsPH.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int? id)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var news = _db.News.Find(id);
+
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            _db.News.Remove(news);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Details(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            News news = _db.News.Find(id);
+
+            if (news == null)
+            {
+                return NotFound();
+            }
+
+            return View(news);
+        }
+
         private string UploadFile(IFormFile file)
         {
             string uniqueFileName = null;
