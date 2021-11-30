@@ -18,7 +18,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
                     <ul class="navbar-nav flex-grow-1 align-items-center">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -28,7 +28,7 @@
                         </li>
                         @if (SigninManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
+                            <li class="nav-item d-flex align-items-center">
                                 <form id="logoutForm" class="Logoff" asp-action="Logoff" asp-controller="Account">
                                     <span class="text-primary">Hello, @User.Identity.Name</span>
                                     <input type="submit" value="Log off" class="btn btn-sm btn-primary" />

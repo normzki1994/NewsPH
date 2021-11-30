@@ -32,6 +32,11 @@ namespace NewsPH.Controllers
         public IActionResult Index()
         {
             IEnumerable<News> news = _db.News;
+            foreach (var obj in news)
+            {
+                obj.NewsCategory = _db.NewsCategories.FirstOrDefault(u => u.Id == obj.NewsCategoryId);
+            }
+
             return View(news);
         }
 
@@ -192,6 +197,8 @@ namespace NewsPH.Controllers
             {
                 return NotFound();
             }
+
+            news.NewsCategory = _db.NewsCategories.Find(news.NewsCategoryId);
 
             return View(news);
         }

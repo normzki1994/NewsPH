@@ -1,4 +1,5 @@
 ﻿@model NewsPH.Models.News
+@inject Microsoft.AspNetCore.Identity.SignInManager<NewsPH.Models.ApplicationUser> SigninManager
 
 @{
     ViewData["Title"] = Model.Title;
@@ -8,15 +9,19 @@
     <div class="card">
         <img src="~/news-image/@Model.Image" class="card-img-top" alt="...">
         <div class="card-body">
+            <a class="btn btn-sm btn-info text-white mb-2">@Model.NewsCategory.Name</a>
             <h5 class="card-title">@Model.Title</h5>
             <p class="card-text">@Model.Content</p>
             <span class="d-block text-sm-left fw-light mb-2">@Model.Date</span>
             <div class="d-flex align-items-center">
-                <a asp-controller="News" asp-action="Update" asp-route-Id="@Model.Id" class="btn btn-primary mr-1">Update</a>
-                <form method="post" asp-controller="News" asp-action="Delete" asp-route-Id="@Model.Id">
-                    <input type="hidden" value="@Model.Id" />
-                    <input type="submit" value="Delete" class="btn btn-danger" />
-                </form>
+                @if (SigninManager.IsSignedIn(User))
+                {
+                    <a asp-controller="News" asp-action="Update" asp-route-Id="@Model.Id" class="btn btn-primary mr-1">Update</a>
+                    <form method="post" asp-controller="News" asp-action="Delete" asp-route-Id="@Model.Id">
+                        <input type="hidden" value="@Model.Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                }
             </div>
         </div>
     </div>

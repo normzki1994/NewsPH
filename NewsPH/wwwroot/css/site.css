@@ -70,8 +70,27 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+/*My custome styles*/
+
 .news-image {
     width: 10rem;
     height: 5rem;
 }
+
+@media(min-width: 768px) {
+    .news-list {
+        display: grid;
+        grid-template-columns: 45% 45%;
+        column-gap: 16px;
+        justify-content: center;
+    }
+}
+
+@media(min-width: 992px) {
+    .news-list {
+        grid-template-columns: 30% 30% 30%;
+    }
+}
+
+
 
