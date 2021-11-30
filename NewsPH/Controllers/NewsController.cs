@@ -31,6 +31,7 @@ namespace NewsPH.Controllers
 
         public IActionResult Index()
         {
+            IEnumerable<NewsViewModel> newsViewmodel;
             IEnumerable<News> news = _db.News;
             foreach (var obj in news)
             {

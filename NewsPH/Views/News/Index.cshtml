@@ -23,6 +23,7 @@
                         <h5 class="card-title">@news.Title</h5>
                         @*<p class="card-text">@news.Content</p>*@
                         <span class="d-block text-sm-left fw-light mb-2">@news.Date</span>
+                        <span class="d-block text-sm-left fw-light mb-2">@news.Date</span>
                         <div class="d-flex align-items-center">
                             <a asp-controller="News" asp-action="Details" asp-route-Id="@news.Id" class="btn btn-secondary mr-1">View</a>
                             @if (SigninManager.IsSignedIn(User))

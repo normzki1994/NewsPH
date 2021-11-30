@@ -16,5 +16,6 @@ namespace NewsPH.Models.ViewModels
         [AllowedExtensions(new string[] { ".jpg", ".png", ".jpeg" })]
         public IFormFile ImageFile { get; set; }
         public IEnumerable<SelectListItem> NewsCategories { get; set; }
+        public int Likes { get; set; }
     }
 }
