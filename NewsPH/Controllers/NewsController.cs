@@ -201,7 +201,18 @@ namespace NewsPH.Controllers
 
             news.NewsCategory = _db.NewsCategories.Find(news.NewsCategoryId);
 
-            return View(news);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isLiked = (from l in _db.Likes
+                          where l.NewsId == news.Id && l.UserId == userId
+                          select l).Count();
+
+            NewsDetailViewModel model = new NewsDetailViewModel()
+            {
+                News = news,
+                IsLiked = isLiked == 1 ? true : false
+            };
+
+            return View(model);
         }
 
         private string UploadFile(IFormFile file)
