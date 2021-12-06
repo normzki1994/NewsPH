@@ -31,14 +31,21 @@ namespace NewsPH.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<NewsViewModel> newsViewmodel;
+            List<NewsViewModel> newsViewmodel = new List<NewsViewModel>();
             IEnumerable<News> news = _db.News;
             foreach (var obj in news)
             {
                 obj.NewsCategory = _db.NewsCategories.FirstOrDefault(u => u.Id == obj.NewsCategoryId);
+                newsViewmodel.Add(new NewsViewModel()
+                { 
+                    News = obj,
+                    Likes = (from l in _db.Likes
+                             where l.NewsId == obj.Id
+                             select l).Count(),
+                });
             }
 
-            return View(news);
+            return View(newsViewmodel);
         }
 
         public IActionResult Create()

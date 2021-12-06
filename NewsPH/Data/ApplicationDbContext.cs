@@ -18,5 +18,7 @@ namespace NewsPH.Data
         public DbSet<News> News { get; set; }
         public DbSet<NewsCategory> NewsCategories { get; set; }
         public DbSet<Likes> Likes { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<NewsComment> NewsComments { get; set; }
     }
 }

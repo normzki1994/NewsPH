@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NewsPH.Models.News>
+﻿@model IEnumerable<NewsPH.Models.ViewModels.NewsViewModel>
 @inject Microsoft.AspNetCore.Identity.SignInManager<NewsPH.Models.ApplicationUser> SigninManager
 
 @{
@@ -17,19 +17,20 @@
             @foreach (var news in Model)
             {
                 <div class="card news-item mb-4">
-                    <img src="~/news-image/@news.Image" class="card-img-top" alt="...">
+                    <img src="~/news-image/@news.News.Image" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <a class="btn btn-sm btn-info text-white mb-2">@news.NewsCategory.Name</a>
-                        <h5 class="card-title">@news.Title</h5>
+                        <a class="btn btn-sm btn-info text-white mb-2">@news.News.NewsCategory.Name</a>
+                        <h5 class="card-title">@news.News.Title</h5>
                         @*<p class="card-text">@news.Content</p>*@
-                        <span class="d-block text-sm-left fw-light mb-2">@news.Date</span>
+                        <span class="d-block text-sm-left fw-light mb-2">@news.News.Date</span>
+                        <span class="d-block text-sm-left fw-light mb-2 text-primary">@news.Likes Likes</span>
                         <div class="d-flex align-items-center">
-                            <a asp-controller="News" asp-action="Details" asp-route-Id="@news.Id" class="btn btn-secondary mr-1">View</a>
+                            <a asp-controller="News" asp-action="Details" asp-route-Id="@news.News.Id" class="btn btn-secondary mr-1">View</a>
                             @if (SigninManager.IsSignedIn(User))
                             {
-                                <a asp-controller="News" asp-action="Update" asp-route-Id="@news.Id" class="btn btn-primary mr-1">Update</a>
-                                <form method="post" asp-controller="News" asp-action="Delete" asp-route-Id="@news.Id">
-                                    <input type="hidden" value="@news.Id" />
+                                <a asp-controller="News" asp-action="Update" asp-route-Id="@news.News.Id" class="btn btn-primary mr-1">Update</a>
+                                <form method="post" asp-controller="News" asp-action="Delete" asp-route-Id="@news.News.Id">
+                                    <input type="hidden" value="@news.News.Id" />
                                     <input type="submit" value="Delete" class="btn btn-danger" />
                                 </form>
                             }
