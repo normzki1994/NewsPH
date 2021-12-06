@@ -213,10 +213,28 @@ namespace NewsPH.Controllers
                           where l.NewsId == news.Id && l.UserId == userId
                           select l).Count();
 
+            var newscomments = (from newscomment in _db.NewsComments
+                            where newscomment.NewsId == news.Id
+                            select newscomment);
+
+            List<Comment> comments = new List<Comment>();
+
+            foreach (var newscomment in newscomments)
+            {
+                var comment = _db.Comments.Find(newscomment.CommentId);
+                if (comment != null)
+                {
+                    var user = _db.Users.Find(comment.UserId);
+                    comment.ApplicationUser = user;
+                    comments.Add(comment);
+                }
+            }
+
             NewsDetailViewModel model = new NewsDetailViewModel()
             {
                 News = news,
-                IsLiked = isLiked == 1 ? true : false
+                IsLiked = isLiked == 1 ? true : false,
+                Comments = comments.OrderByDescending(c => c.Date).ToList()
             };
 
             return View(model);

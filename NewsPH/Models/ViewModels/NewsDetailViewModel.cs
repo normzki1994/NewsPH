@@ -9,5 +9,7 @@ namespace NewsPH.Models.ViewModels
     {
         public News News { get; set; }
         public bool IsLiked { get; set; }
+        public Comment Comment { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }
