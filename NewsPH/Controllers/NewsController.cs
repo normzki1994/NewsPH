@@ -42,6 +42,9 @@ namespace NewsPH.Controllers
                     Likes = (from l in _db.Likes
                              where l.NewsId == obj.Id
                              select l).Count(),
+                    Comments = (from c in _db.NewsComments
+                                where c.NewsId == obj.Id
+                                select c).Count()
                 });
             }
 

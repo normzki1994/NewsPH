@@ -30,18 +30,15 @@ namespace NewsPH.Controllers
                 return Unauthorized();
             }
 
-            Comment comment = new Comment();
-            comment = model.Comment;
-
-            comment.UserId = userId;
-            comment.Date = DateTime.Now;
+            model.Comment.UserId = userId;
+            model.Comment.Date = DateTime.Now;
 
             //if (ModelState.IsValid)
             //{
-                _db.Comments.Add(comment);
+                _db.Comments.Add(model.Comment);
                 _db.SaveChanges();
 
-                int commentId = comment.Id;
+                int commentId = model.Comment.Id;
 
                 NewsComment newsComment = new NewsComment()
                 {

@@ -17,5 +17,6 @@ namespace NewsPH.Models.ViewModels
         public IFormFile ImageFile { get; set; }
         public IEnumerable<SelectListItem> NewsCategories { get; set; }
         public int Likes { get; set; }
+        public int Comments { get; set; }
     }
 }
