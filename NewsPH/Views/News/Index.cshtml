@@ -7,7 +7,7 @@
 
 <section>
     <div class="d-flex align-items-center mb-4">
-        <h1 class="text-center d-inline-block mr-4">News</h1>
+        <h1 class="text-center d-inline-block me-4">News</h1>
         <a class="btn btn-success" asp-controller="News" asp-action="Create">Add</a>
     </div>
 
@@ -24,14 +24,14 @@
                         @*<p class="card-text">@news.Content</p>*@
                         <span class="d-block text-sm-left fw-light mb-2">@news.News.Date</span>
                         <div class="d-flex">
-                            <span class="fw-light mb-2 mr-4 text-primary">@news.Likes Likes</span>
+                            <span class="fw-light mb-2 me-4 text-primary">@news.Likes Likes</span>
                             <span class="fw-light mb-2 text-primary">@news.Comments Comments</span>
                         </div>
                         <div class="d-flex align-items-center">
-                            <a asp-controller="News" asp-action="Details" asp-route-Id="@news.News.Id" class="btn btn-secondary mr-1">View</a>
+                            <a asp-controller="News" asp-action="Details" asp-route-Id="@news.News.Id" class="btn btn-secondary me-1">View</a>
                             @if (SigninManager.IsSignedIn(User))
                             {
-                                <a asp-controller="News" asp-action="Update" asp-route-Id="@news.News.Id" class="btn btn-primary mr-1">Update</a>
+                                <a asp-controller="News" asp-action="Update" asp-route-Id="@news.News.Id" class="btn btn-primary me-1">Update</a>
                                 <form method="post" asp-controller="News" asp-action="Delete" asp-route-Id="@news.News.Id">
                                     <input type="hidden" value="@news.News.Id" />
                                     <input type="submit" value="Delete" class="btn btn-danger" />
