@@ -8,7 +8,10 @@
 <section>
     <div class="d-flex align-items-center mb-4">
         <h1 class="text-center d-inline-block me-4">News</h1>
-        <a class="btn btn-success" asp-controller="News" asp-action="Create">Add</a>
+        @if (SigninManager.IsSignedIn(User))
+        { 
+            <a class="btn btn-success" asp-controller="News" asp-action="Create">Add</a>
+        }
     </div>
 
     @if (Model.Count() > 0)

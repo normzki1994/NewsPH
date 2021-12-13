@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using NewsPH.Data;
 using NewsPH.Models;
 using NewsPH.Models.ViewModels;
+using NewsPH.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,25 +34,34 @@ namespace NewsPH.Controllers
         public IActionResult Index()
         {
             List<NewsViewModel> newsViewmodel = new List<NewsViewModel>();
-            IEnumerable<News> news = _db.News;
+            IEnumerable<News> news = _db.News.OrderByDescending(n => n.Date);
             foreach (var obj in news)
             {
-                obj.NewsCategory = _db.NewsCategories.FirstOrDefault(u => u.Id == obj.NewsCategoryId);
-                newsViewmodel.Add(new NewsViewModel()
-                { 
-                    News = obj,
-                    Likes = (from l in _db.Likes
-                             where l.NewsId == obj.Id
-                             select l).Count(),
-                    Comments = (from c in _db.NewsComments
-                                where c.NewsId == obj.Id
-                                select c).Count()
-                });
+                string connectionString = "Server=.;Database=NewsPH;Trusted_Connection=True;MultipleActiveResultSets=True";
+
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseSqlServer(connectionString);
+
+                using (ApplicationDbContext dbContext = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    obj.NewsCategory = dbContext.NewsCategories.FirstOrDefault(u => u.Id == obj.NewsCategoryId);
+                    newsViewmodel.Add(new NewsViewModel()
+                    {
+                        News = obj,
+                        Likes = (from l in dbContext.Likes
+                                 where l.NewsId == obj.Id
+                                 select l).Count(),
+                        Comments = (from c in dbContext.NewsComments
+                                    where c.NewsId == obj.Id
+                                    select c).Count()
+                    });
+                }
             }
 
             return View(newsViewmodel);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             NewsViewModel newsViewModel = new NewsViewModel()
@@ -66,6 +77,7 @@ namespace NewsPH.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(NewsViewModel model)
         {
             if (model.ImageFile == null)
@@ -101,6 +113,7 @@ namespace NewsPH.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(int? id)
         {
             if (id == null || id == 0)
@@ -129,6 +142,7 @@ namespace NewsPH.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(UpdateNewsViewModel model)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -174,6 +188,7 @@ namespace NewsPH.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int? id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -224,12 +239,20 @@ namespace NewsPH.Controllers
 
             foreach (var newscomment in newscomments)
             {
-                var comment = _db.Comments.Find(newscomment.CommentId);
-                if (comment != null)
+                string connectionString = "Server=.;Database=NewsPH;Trusted_Connection=True;MultipleActiveResultSets=True";
+
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseSqlServer(connectionString);
+
+                using (ApplicationDbContext dbContext = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    var user = _db.Users.Find(comment.UserId);
-                    comment.ApplicationUser = user;
-                    comments.Add(comment);
+                    var comment = dbContext.Comments.Find(newscomment.CommentId);
+                    if (comment != null)
+                    {
+                        var user = dbContext.Users.Find(comment.UserId);
+                        comment.ApplicationUser = user;
+                        comments.Add(comment);
+                    }
                 }
             }
 

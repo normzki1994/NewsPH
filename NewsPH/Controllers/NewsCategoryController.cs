@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NewsPH.Data;
 using NewsPH.Models;
 using System;
@@ -17,12 +18,14 @@ namespace NewsPH.Controllers
             _db = db;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var newsCategories = _db.NewsCategories;
             return View(newsCategories);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -30,6 +33,7 @@ namespace NewsPH.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(NewsCategory model)
         {
             if (ModelState.IsValid)
@@ -41,6 +45,7 @@ namespace NewsPH.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(int? id)
         {
             if (id == null || id == 0)
@@ -60,6 +65,7 @@ namespace NewsPH.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(NewsCategory newsCategory)
         {
             if (ModelState.IsValid)
